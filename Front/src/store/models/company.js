@@ -38,7 +38,7 @@ export default {
 
         context.commit("setCompany", {
           ...company,
-          location: JSON.parse(company.location),
+          location: company.location ? JSON.parse(company.location) : [0, 0],
         });
       } catch (error) {
         console.error(error);
@@ -51,6 +51,7 @@ export default {
 
       try {
         const companyData = context.state.company;
+        console.log(companyData)
         const { id } = await postRequest({
           url: "api/v1/Company/Create/",
           data: {

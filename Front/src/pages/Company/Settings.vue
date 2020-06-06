@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "CompanySettings",
+  name: "Settings",
 };
 </script>
 

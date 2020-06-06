@@ -1,9 +1,5 @@
 <template>
   <el-card class="error-container" shadow="always">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@500&display=swap"
-      rel="stylesheet"
-    />
     <h1>Opps!☹</h1>
     <h2>Ошибка 404: Страница не найдена!</h2>
     <div class="center">

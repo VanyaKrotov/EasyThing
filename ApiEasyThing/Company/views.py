@@ -18,6 +18,24 @@ class CompanyCreateView(generics.CreateAPIView):
     serializer_class = CompanyDetailSerializer
 
 
+class CompanyDeleteView(generics.DestroyAPIView):
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CompanyDetailSerializer
+    queryset = Company.objects.all()
+    lookup_field = 'id'
+
+
+class CompanyEditView(generics.UpdateAPIView):
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CompanyDetailSerializer
+    queryset = Company.objects.all()
+    lookup_field = 'id'
+
+
 class CompaniesAllView(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
 
@@ -42,7 +60,9 @@ class CompanyView(APIView):
         if not len(company):
             return Response({"detail": "Компания не найдена"}, status=404)
 
-        company[0]["services"] = ServiceGetSerializer(
+        company = company[0]
+
+        company["services"] = ServiceGetSerializer(
             Service.objects.all().filter(company=id, parentService=None), many=True).data
 
         return Response({"company": company})

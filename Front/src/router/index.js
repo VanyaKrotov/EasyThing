@@ -5,8 +5,9 @@ import Page404 from "../pages/ErrorPages/Page404";
 import Companies from "../pages/Company/Companies";
 import Login from "../pages/Login";
 import CompanyEdit from "../pages/Company/Edit";
-import CompanySettings from "../pages/Company/CompanySettings";
-import CompanyProfile from "../pages/Company/CompanyProfile";
+import CompanySettings from "../pages/Company/Settings";
+import Company from "../pages/Company/Company";
+import CompanyFeed from "../pages/Company/Feed";
 
 export default new Router({
   routes: [
@@ -34,17 +35,14 @@ export default new Router({
       path: "/company/create",
       component: CompanyEdit,
     },
+    { path: "/company/:id/edit", component: CompanyEdit },
     {
-      path: "/company/:id/edit",
-      component: CompanyEdit,
-    },
-    {
-      path: "/company/:id/feed",
-      component: CompanyProfile,
-    },
-    {
-      path: "/company/:id/settings",
-      component: CompanySettings,
+      path: "/company/:id",
+      component: Company,
+      children: [
+        { path: "feed", component: CompanyFeed },
+        { path: "settings", component: CompanySettings },
+      ],
     },
     {
       path: "*",
