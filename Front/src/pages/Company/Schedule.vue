@@ -1,11 +1,13 @@
 <template>
   <div>
-    feed
+    Schedule
   </div>
 </template>
 
 <script>
 export default {
-  name: "Feed",
+  name: "Schedule",
 };
 </script>
+
+<style scoped></style>

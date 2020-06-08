@@ -4,7 +4,7 @@
       <Header />
       <el-main>
         <!-- <keep-alive> -->
-          <router-view></router-view>
+        <router-view></router-view>
         <!-- </keep-alive> -->
       </el-main>
       <Footer />
@@ -39,6 +39,11 @@ export default {
   font-weight: 500;
 }
 
+html{
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0px;
 }
@@ -68,5 +73,10 @@ a {
 
 .text-center {
   text-align: center;
+}
+
+.link-item {
+  display: inline-block;
+  height: 100%;
 }
 </style>

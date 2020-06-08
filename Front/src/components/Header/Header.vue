@@ -3,7 +3,7 @@
     <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="10" class="logo">
       <router-link to="/home">EasyThing</router-link>
     </el-col>
-    <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="14" class="links-control ">
+    <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="14" class="links-control">
       <el-menu
         :default-active="$route.fullPath"
         mode="horizontal"
@@ -106,11 +106,6 @@ export default {
   font-size: 20px;
   text-align: center;
   line-height: none;
-}
-
-.link-item {
-  display: inline-block;
-  height: 100%;
 }
 
 .logo a {

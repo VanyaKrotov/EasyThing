@@ -8,6 +8,9 @@ import CompanyEdit from "../pages/Company/Edit";
 import CompanySettings from "../pages/Company/Settings";
 import Company from "../pages/Company/Company";
 import CompanyFeed from "../pages/Company/Feed";
+import CompanyServices from "../pages/Company/Services";
+import CompanySchedule from "../pages/Company/Schedule";
+import CompanyWorkers from "../pages/Company/Workers";
 
 export default new Router({
   routes: [
@@ -17,7 +20,7 @@ export default new Router({
       name: "home",
     },
     {
-      path: "/services",
+      path: "/service",
       component: Services,
       name: "services",
     },
@@ -41,6 +44,9 @@ export default new Router({
       component: Company,
       children: [
         { path: "feed", component: CompanyFeed },
+        { path: "services", component: CompanyServices },
+        { path: "schedule", component: CompanySchedule },
+        { path: "workers", component: CompanyWorkers },
         { path: "settings", component: CompanySettings },
       ],
     },

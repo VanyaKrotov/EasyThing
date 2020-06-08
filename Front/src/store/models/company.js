@@ -38,7 +38,7 @@ export default {
 
         context.commit("setCompany", {
           ...company,
-          location: company.location ? JSON.parse(company.location) : [0, 0],
+          location: JSON.parse(company.location),
         });
       } catch (error) {
         console.error(error);

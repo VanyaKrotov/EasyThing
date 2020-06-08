@@ -23,7 +23,7 @@ class ServiceGetSerializer(serializers.ModelSerializer):
         model = Service
         fields = ('id', 'country', 'adress', 'description', 'title', 'typeId', 'company', 'children')
 
-    def get_fields(self):
-        fields = super(ServiceGetSerializer, self).get_fields()
-        fields['children'] = ServiceGetSerializer(many=True)
-        return fields
+    # def get_fields(self):
+    #     fields = super(ServiceGetSerializer, self).get_fields()
+    #     fields['children'] = ServiceGetSerializer(many=True)
+    #     return fields

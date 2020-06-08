@@ -63,7 +63,7 @@ class CompanyView(APIView):
         company = company[0]
 
         company["services"] = ServiceGetSerializer(
-            Service.objects.all().filter(company=id, parentService=None), many=True).data
+            Service.objects.all().filter(company=id), many=True).data
 
         return Response({"company": company})
 
