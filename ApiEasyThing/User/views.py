@@ -25,7 +25,7 @@ class LoginView(APIView):
         username = request.data.get("username")
         password = request.data.get("password")
         user = authenticate(username=username, password=password)
-
+        print(user)
         if user is not None and user.is_active:
             login(request, user)
             userData = UserGetSerializer(User.objects.all().filter(
