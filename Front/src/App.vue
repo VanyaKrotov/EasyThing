@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <div v-loading="statusLoading">
+    <div v-loading="isLoadingUser">
       <Header />
-      <el-main>
-        <!-- <keep-alive> -->
-        <router-view></router-view>
-        <!-- </keep-alive> -->
-      </el-main>
+      <RightMenu>
+        <el-main>
+          <!-- <keep-alive> -->
+          <router-view></router-view>
+          <!-- </keep-alive> -->
+        </el-main>
+      </RightMenu>
       <Footer />
     </div>
   </div>
@@ -16,16 +18,20 @@
 import { mapActions, mapGetters } from "vuex";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import RightMenu from "./components/RightMenu/RightMenu";
 
 export default {
   name: "App",
   components: {
     Header,
     Footer,
+    RightMenu,
   },
-  methods: mapActions(["authUser"]),
+  methods: {
+    ...mapActions(["authUser"]),
+  },
   computed: {
-    ...mapGetters(["isUserLoading", "statusLoading"]),
+    ...mapGetters(["isLoadingUser"]),
   },
   async mounted() {
     this.authUser();
@@ -39,7 +45,7 @@ export default {
   font-weight: 500;
 }
 
-html{
+html {
   width: 100%;
   height: 100%;
 }
@@ -78,5 +84,6 @@ a {
 .link-item {
   display: inline-block;
   height: 100%;
+  color: #409eff;
 }
 </style>

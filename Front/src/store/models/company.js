@@ -17,6 +17,8 @@ const defaultCompany = {
 export default {
   actions: {
     async fetchAllCompanies(context) {
+      context.state.isFetching = true;
+
       try {
         const { companies } = await getRequest({
           url: `api/v1/Company/Companies/`,
@@ -26,9 +28,11 @@ export default {
       } catch (error) {
         console.error(error);
       }
+
+      context.state.isFetching = false;
     },
     async fetchCompany(context, { companyId }) {
-      context.commit("setFormState", true);
+      context.state.isFetching = true;
       context.commit("setCompany", { ...defaultCompany });
 
       try {
@@ -44,14 +48,14 @@ export default {
         console.error(error);
       }
 
-      context.commit("setFormState", false);
+      context.state.isFetching = false;
     },
     async createCompany(context, { setMessage, router }) {
-      context.commit("setFormState", true);
+      context.state.isFetching = true;
 
       try {
         const companyData = context.state.company;
-        console.log(companyData)
+        console.log(companyData);
         const { id } = await postRequest({
           url: "api/v1/Company/Create/",
           data: {
@@ -80,10 +84,10 @@ export default {
         console.error(error);
       }
 
-      context.commit("setFormState", false);
+      context.state.isFetching = false;
     },
     async editCompany(context, { setMessage, router }) {
-      context.commit("setFormState", true);
+      context.state.isFetching = true;
 
       try {
         const companyData = context.state.company;
@@ -113,9 +117,11 @@ export default {
         console.error(error);
       }
 
-      context.commit("setFormState", false);
+      context.state.isFetching = false;
     },
     async deleteCompany(context, { router, id, setMessage }) {
+      context.state.isFetching = true;
+
       try {
         await deleteRequest({
           url: `api/v1/Company/Delete/${id}/`,
@@ -133,33 +139,27 @@ export default {
         });
         console.error(error);
       }
+
+      context.state.isFetching = false;
     },
   },
   mutations: {
     setCompanies(state, companiesList) {
       state.companiesList = companiesList;
+      state.isFetching = false;
     },
     setCompany(state, company) {
       state.company = company;
     },
-    setFormState(state, formState) {
-      state.isFormSubmitting = formState;
-    },
   },
   state: {
+    isFetching: false,
     companiesList: [],
     company: { ...defaultCompany },
-    isFormSubmitting: false,
   },
   getters: {
-    getAllCompanies(state) {
-      return state.companiesList;
-    },
-    getCompanyValues: (state) => {
-      return state.company;
-    },
-    getFormState(state) {
-      return state.isFormSubmitting;
-    },
+    getAllCompanies: ({ companiesList }) => companiesList,
+    getCompanyValues: ({ company }) => company,
+    isLoadingCompany: ({ isFetching }) => isFetching,
   },
 };

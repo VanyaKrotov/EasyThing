@@ -4,7 +4,7 @@
       status-icon
       label-position="top"
       ref="companyEdit"
-      :disable="getFormState"
+      :disable="isLoadingCompany"
       label-width="100px"
       :model="getCompanyValues"
     >
@@ -109,7 +109,7 @@
         <vue-editor v-model="getCompanyValues.description" name="description" />
       </el-form-item>
       <el-form-item class="buttons-control">
-        <el-button type="primary" @click="submitForm" :loading="getFormState"
+        <el-button type="primary" @click="submitForm" :loading="isLoadingCompany"
           >Сохранить</el-button
         >
         <el-button @click="cancelHandler">Отменить</el-button>
@@ -129,7 +129,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getCompanyValues", "getFormState"]),
+    ...mapGetters(["getCompanyValues", "isLoadingCompany"]),
   },
   methods: {
     ...mapMutations(["setStatusLoading"]),

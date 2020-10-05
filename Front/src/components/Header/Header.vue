@@ -1,53 +1,61 @@
 <template>
-  <el-row class="header">
-    <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="10" class="logo">
-      <router-link to="/home">EasyThing</router-link>
-    </el-col>
-    <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="14" class="links-control">
-      <el-menu
-        :default-active="$route.fullPath"
-        mode="horizontal"
-        active-text-color="#409EFF"
-      >
-        <el-menu-item index="/home">
-          <router-link to="/home" class="link-item">
-            Главная
-          </router-link>
-        </el-menu-item>
-        <el-menu-item index="/companies">
-          <router-link to="/companies" class="link-item">
-            Компании
-          </router-link>
-        </el-menu-item>
-        <el-submenu
-          :index="`/${userId}/`"
-          v-if="isAuthenticated"
-          class="menu-user"
+  <div>
+    <el-row class="header">
+      <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="10" class="logo">
+        <div>
+          <router-link to="/home">EasyThing</router-link>
+        </div>
+      </el-col>
+      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="7">
+        <el-menu
+          :default-active="$route.fullPath"
+          mode="horizontal"
+          active-text-color="#409EFF"
         >
-          <template slot="title">{{ userName }}</template>
-          <router-link :to="`/${userId}/profile`"
-            ><el-menu-item :index="`/${userId}/profile`">
+          <el-menu-item index="/home">
+            <router-link to="/home" class="link-item"> Главная </router-link>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="7" class="user-col">
+        <el-dropdown trigger="click" v-if="isAuthenticated">
+          <el-button icon="el-icon-bell" circle></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <div style="width: 200px; height: 200px">notification</div>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-dropdown
+          v-if="isAuthenticated"
+          trigger="click"
+          @command="(command) => command()"
+        >
+          <div class="user-avatar-button">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="userName"
+              placement="bottom-end"
+            >
+              <el-avatar
+                :size="40"
+                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+              ></el-avatar>
+            </el-tooltip>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="() => $router.push('/home')">
               Профиль
-            </el-menu-item></router-link
-          >
-          <el-menu-item :index="`/${userId}/notifications/`">
-            Уведомления
-          </el-menu-item>
-          <el-menu-item :index="`/${userId}/settings/`">
-            Настройки
-          </el-menu-item>
-          <el-menu-item @click="exit" index="exit">
-            Выход
-          </el-menu-item>
-        </el-submenu>
-        <el-menu-item v-else class="menu-user">
-          <router-link to="/login">
-            Войти
-          </router-link>
-        </el-menu-item>
-      </el-menu>
-    </el-col>
-  </el-row>
+            </el-dropdown-item>
+            <el-dropdown-item :command="exit" divided>Выход</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button plain v-else-if="$route.fullPath !== '/login'">
+          <router-link to="/login" class="link-item"> Войти </router-link>
+        </el-button>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -55,6 +63,14 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Header",
+  props: ["collapsedTrigger"],
+  data() {
+    return {
+      search: {
+        query: "",
+      },
+    };
+  },
   computed: {
     ...mapGetters(["getUserInformation", "isAuthenticated"]),
     fullPath() {
@@ -92,10 +108,6 @@ export default {
   text-decoration: none;
 }
 
-.header {
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
-}
-
 .logo a,
 .item-link-sidebar a {
   transition: 150ms;
@@ -105,11 +117,12 @@ export default {
 .logo {
   font-size: 20px;
   text-align: center;
-  line-height: none;
+  border-bottom: solid 1px #e6e6e6;
 }
 
 .logo a {
   line-height: 3em;
+  color: #409eff;
 }
 
 .menu-user {
@@ -119,5 +132,22 @@ export default {
 
 .el-col {
   min-height: 50px;
+}
+
+.user-avatar-button {
+  cursor: pointer;
+}
+
+.user-col {
+  height: 61px;
+  border-bottom: solid 1px #e6e6e6;
+  padding: 10px 12px;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-col > div {
+  margin: 0px 5px;
 }
 </style>

@@ -3,7 +3,7 @@ import { postRequest, getRequest } from ".././../request-methods";
 export default {
   actions: {
     async loginUser(context, { data, message, router }) {
-      context.rootState.isLoading = true;
+      context.state.isFetching = true;
 
       try {
         const { user } = await postRequest({
@@ -20,10 +20,10 @@ export default {
         });
       }
 
-      context.rootState.isLoading = false;
+      context.state.isFetching = false;
     },
     async authUser(context) {
-      context.rootState.isLoading = true;
+      context.state.isFetching = true;
 
       try {
         const { user } = await getRequest({
@@ -35,10 +35,10 @@ export default {
         console.error(detail);
       }
 
-      context.rootState.isLoading = false;
+      context.state.isFetching = false;
     },
     async logoutUser(context) {
-      context.rootState.isLoading = true;
+      context.state.isFetching = true;
 
       try {
         await getRequest({
@@ -51,15 +51,17 @@ export default {
         console.error(detail);
       }
 
-      context.rootState.isLoading = false;
+      context.state.isFetching = false;
     },
   },
   mutations: {
     setUserInformation(state, information) {
       state.user = information;
+      state.isFetching = false;
     },
   },
   state: {
+    isFetching: false,
     user: null,
   },
   getters: {
@@ -69,5 +71,6 @@ export default {
     getUserInformation(state) {
       return state.user;
     },
+    isLoadingUser: ({ isFetching }) => isFetching,
   },
 };
