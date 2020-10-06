@@ -1,19 +1,19 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="isEditForm && isLoadingCompany">
+    <AuthenticationError v-if="!isAuthenticated" />
     <el-form
+      v-else
       status-icon
       label-position="top"
       ref="companyEdit"
       :disable="isLoadingCompany"
       label-width="100px"
-      :model="getCompanyValues"
+      :model="formData"
     >
-      <h2>
+      <h2 class="title">
         <span v-if="isEditForm">Редактирование компании</span>
         <span v-else>Создание компании</span>
-        <span v-if="getCompanyValues.title"
-          >: "{{ getCompanyValues.title }}"</span
-        >
+        <span v-if="formData.title">: "{{ formData.title }}"</span>
         <el-popconfirm
           v-if="isEditForm"
           confirmButtonText="Да"
@@ -24,7 +24,7 @@
           title="Вы действительно хотите удалить компанию?"
         >
           <el-button type="danger" slot="reference" class="delete-button" plain
-            >Удалить компанию</el-button
+            >Удалить</el-button
           >
         </el-popconfirm>
       </h2>
@@ -41,7 +41,7 @@
           },
         ]"
       >
-        <el-input v-model="getCompanyValues.title" name="title" />
+        <el-input v-model="formData.title" name="title" />
       </el-form-item>
       <el-form-item
         label="Электронная почта:"
@@ -59,38 +59,28 @@
           },
         ]"
       >
-        <el-input v-model="getCompanyValues.email" name="email" />
+        <el-input v-model="formData.email" name="email" />
       </el-form-item>
       <el-form-item label="Дата основания компании:" prop="dateCreated">
         <el-date-picker
-          v-model="getCompanyValues.dateCreated"
+          v-model="formData.dateCreated"
           type="date"
           name="dateCreated"
           placeholder="Выберите дату основания"
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item
-        label="Расположение компании:"
-        prop="location"
-        :rules="[
-          {
-            required: true,
-            message: 'Располонение должно быть указанно',
-            trigger: 'blur',
-          },
-        ]"
-      >
+      <el-form-item label="Расположение компании:" prop="location">
         <div class="container-map">
           <yandex-map
-            :coords="getCompanyValues.location"
+            :coords="formData.location"
             :zoom="10"
             @click="changeLocation"
           >
             <ymap-marker
-              :coords="getCompanyValues.location"
+              :coords="formData.location"
               marker-id="123"
-              :hint-content="getCompanyValues.title"
+              :hint-content="formData.title"
             />
           </yandex-map>
         </div>
@@ -106,10 +96,13 @@
           },
         ]"
       >
-        <vue-editor v-model="getCompanyValues.description" name="description" />
+        <vue-editor v-model="formData.description" name="description" />
       </el-form-item>
       <el-form-item class="buttons-control">
-        <el-button type="primary" @click="submitForm" :loading="isLoadingCompany"
+        <el-button
+          type="primary"
+          @click="submitForm"
+          :loading="isLoadingCompany"
           >Сохранить</el-button
         >
         <el-button @click="cancelHandler">Отменить</el-button>
@@ -120,16 +113,22 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from "vuex";
+import { defaultCompany } from "../../store/models/company";
+import AuthenticationError from "../ConfirmPages/AuthenticationError";
 
 export default {
   name: "Edit",
+  components: {
+    AuthenticationError,
+  },
   data() {
     return {
       isEditForm: false,
+      formData: { ...defaultCompany },
     };
   },
   computed: {
-    ...mapGetters(["getCompanyValues", "isLoadingCompany"]),
+    ...mapGetters(["getCompanyValues", "isLoadingCompany", "isAuthenticated"]),
   },
   methods: {
     ...mapMutations(["setStatusLoading"]),
@@ -139,14 +138,15 @@ export default {
       "editCompany",
       "fetchCompany",
     ]),
-    async changeLocation(e) {
-      this.getCompanyValues.location = e.get("coords");
+    changeLocation(e) {
+      this.formData.location = e.get("coords");
     },
     async submitForm() {
       this.$refs["companyEdit"].validate((valid) => {
         if (valid) {
           const serviceObject = {
             setMessage: this.$message,
+            companyData: this.formData,
             router: this.$router,
           };
 
@@ -180,7 +180,7 @@ export default {
     handlerDelete() {
       this.deleteCompany({
         setMessage: this.$message,
-        id: this.getCompanyValues.id,
+        id: this.formData.id,
         router: this.$router,
       });
     },
@@ -189,13 +189,18 @@ export default {
     const companyId = this.$route.params.id || 0;
 
     this.isEditForm = Boolean(companyId);
-    this.fetchCompany({ companyId });
 
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        this.getCompanyValues.location = [latitude, longitude];
-      }
-    );
+    if (this.isEditForm) {
+      await this.fetchCompany({ companyId });
+
+      this.formData = this.getCompanyValues;
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          this.formData.location = [latitude, longitude];
+        }
+      );
+    }
   },
 };
 </script>
@@ -227,5 +232,9 @@ h2 {
 .container-map {
   width: 100%;
   height: 500px;
+}
+
+.title {
+  color: var(--primary_text);
 }
 </style>

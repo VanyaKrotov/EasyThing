@@ -2,10 +2,9 @@
   <el-row class="menu-row" :style="{ height: getFullHeight }">
     <div style="height: 100%">
       <el-menu
+        text-color="#909399"
         :default-active="$route.fullPath"
         class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
         active-text-color="#409EFF"
         :collapse="isCollapsed"
         v-if="isAuthenticated"
@@ -15,10 +14,15 @@
         <div style="height: 80%">
           <el-menu-item index="/companies">
             <i class="el-icon-office-building"></i>
-            <span slot="title" to="/companies">Компании</span>
+            <span slot="title">Компании</span>
           </el-menu-item>
 
-          <el-menu-item index="/analitics">
+          <el-menu-item index="/servecies">
+            <i class="el-icon-school"></i>
+            <span slot="title">Предприятия</span>
+          </el-menu-item>
+
+          <el-menu-item index="/analytics">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">Аналитика</span>
           </el-menu-item>
@@ -34,8 +38,8 @@
           </el-menu-item>
         </div>
 
-        <div style="height: 20%; position: relative;">
-          <div style="position: absolute; width: 100%; bottom: 0;">
+        <div style="height: 20%; position: relative">
+          <div style="position: absolute; width: 100%; bottom: 0">
             <el-menu-item index="/settings">
               <i class="el-icon-setting"></i>
               <span slot="title">Настройки</span>
@@ -64,33 +68,35 @@ export default {
   data() {
     return {
       isCollapsed: true,
+      menuHeight: 0,
     };
   },
   computed: {
     ...mapGetters(["isAuthenticated"]),
     getFullHeight() {
-      const clientHeight = document.getElementsByTagName("html")[0]
-        .clientHeight;
-      return `${clientHeight - 61 * (clientHeight < 770 ? 2 : 1)}px`;
-    },
-    getTopMenuSectionHeight() {
-      return `${
-        this.getFullHeight - document.getElementById("bottom-menu-section")
-      }px`;
+      return `${this.menuHeight}px`;
     },
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    calcMenuHeight() {
+      const clientHeight = document.getElementsByTagName("html")[0]
+        .clientHeight;
+
+      return clientHeight - 61 * (clientHeight < 770 ? 2 : 1);
     },
     menuSelectedHandle(menuItemIndex) {
       if (menuItemIndex) {
         this.$router.push(menuItemIndex);
       }
     },
+    onResuze() {
+      this.menuHeight = this.calcMenuHeight();
+    },
+  },
+  mounted() {
+    this.menuHeight = this.calcMenuHeight();
+
+    window.onresize = this.onResuze;
   },
 };
 </script>

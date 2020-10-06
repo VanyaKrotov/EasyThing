@@ -36,6 +36,11 @@ export default {
 </script>
 
 <style>
+:root {
+  --primary_text: #303133;
+  --regular_text: #606266;
+  --secondary_text: #909399;
+}
 * {
   font-family: "Nunito Sans", sans-serif;
   font-weight: 500;
@@ -88,5 +93,11 @@ a {
 .s_20x20 {
   width: 20px;
   height: 20px;
+}
+
+.fixed-button-right_bottom {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
 }
 </style>

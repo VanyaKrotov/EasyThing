@@ -6,18 +6,40 @@
           <router-link to="/home">EasyThing</router-link>
         </div>
       </el-col>
-      <el-col :xs="12" :sm="10" :md="10" :lg="10" :xl="11">
+      <el-col :xs="18" :sm="14" :md="14" :lg="16" :xl="11">
         <el-menu
           :default-active="$route.fullPath"
           mode="horizontal"
+          @select="(path) => $router.push(path)"
           active-text-color="#409EFF"
         >
           <el-menu-item index="/home">
-            <router-link to="/home" class="link-item"> Главная </router-link>
+            <i class="el-icon-house" />
+            <span slot="title" class="menu-header-title">Главная</span>
           </el-menu-item>
+
+          <el-menu-item index="/near">
+            <i class="el-icon-location-information" />
+            <span slot="title" class="menu-header-title">Поблизости</span>
+          </el-menu-item>
+
+          <el-menu-item index="/news">
+            <i class="el-icon-news" />
+            <span slot="title" class="menu-header-title">Новости</span>
+          </el-menu-item>
+
+          <!-- <el-menu-item index="/about">
+            <i class="el-icon-warning-outline" />
+            <span slot="title" class="menu-header-title">О нас</span>
+          </el-menu-item>
+
+          <el-menu-item index="/help">
+            <i class="el-icon-help" />
+            <span slot="title" class="menu-header-title">Помощь</span>
+          </el-menu-item> -->
         </el-menu>
       </el-col>
-      <el-col :xs="12" :sm="10" :md="10" :lg="10" :xl="11" class="user-col">
+      <el-col :xs="6" :sm="6" :md="6" :lg="4" :xl="11" class="user-col">
         <el-dropdown trigger="click" v-if="isAuthenticated">
           <el-button icon="el-icon-bell" circle></el-button>
           <el-dropdown-menu slot="dropdown">
@@ -44,14 +66,19 @@
             </el-tooltip>
           </div>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="() => $router.push('/home')">
+            <el-dropdown-item :command="() => $router.push('/my/profile')">
               Профиль
             </el-dropdown-item>
             <el-dropdown-item :command="exit" divided>Выход</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button plain v-else-if="$route.fullPath !== '/login'">
-          <router-link to="/login" class="link-item"> Войти </router-link>
+
+        <el-button
+          plain
+          v-else-if="$route.fullPath !== '/login'"
+          @click="$router.push('/login')"
+        >
+          Войти
         </el-button>
       </el-col>
     </el-row>
@@ -104,6 +131,12 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (max-width: 600px) {
+  .menu-header-title {
+    display: none;
+  }
+}
+
 * {
   text-decoration: none;
 }

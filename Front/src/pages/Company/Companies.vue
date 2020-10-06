@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="isLoadingCompany">
     <AuthenticationError v-if="!isAuthenticated" />
     <el-row v-else-if="getAllCompaniesSorted.length > 0">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="">
@@ -34,19 +34,8 @@
                 content="Перейти к настройкам компаний"
                 placement="bottom-end"
               >
-                <el-button icon="el-icon-s-operation" circle/>
+                <el-button icon="el-icon-s-operation" circle />
               </el-tooltip>
-              {{ " " }}
-              <router-link :to="`/company/create`">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="Создать компанию"
-                  placement="bottom-end"
-                >
-                  <el-button icon="el-icon-plus" circle/>
-                </el-tooltip>
-              </router-link>
             </span>
           </el-col>
         </el-row>
@@ -56,44 +45,27 @@
           <el-col
             :xs="24"
             :sm="24"
-            :md="24"
-            :lg="24"
-            :xl="24"
+            :md="12"
+            :lg="12"
+            :xl="8"
             :span="10"
             class="mtb05"
-            v-for="{
-              title,
-              id,
-              email,
-              dateRegistration,
-              dateCreated,
-            } in getAllCompaniesSorted"
+            v-for="{ title, id, email } in getAllCompaniesSorted"
             :key="`company-${id}`"
           >
             <el-card shadow="hover">
               <el-row :gutter="20">
-                <el-col :xs="10" :sm="7" :md="7" :lg="11" :xl="12">
+                <el-col :xs="18" :sm="20" :md="20" :lg="22" :xl="22">
                   <router-link :to="`/company/${id}/feed`">
                     <el-button type="text">{{ title }}</el-button>
                   </router-link>
-                </el-col>
-                <el-col :xs="8" :sm="6" :md="6" :lg="5" :xl="5">
-                  <div class="time">{{ email }}</div>
-                </el-col>
-                <el-col :xs="0" :sm="7" :md="7" :lg="6" :xl="5">
-                  <div class="time">
-                    Основана: {{ dateCreated | dateCreateFilter }}
-                  </div>
-                  <div class="time">
-                    Зарегистрирована: {{ dateRegistration | dateCreateFilter }}
-                  </div>
                 </el-col>
                 <el-col
                   :xs="6"
                   :sm="4"
                   :md="4"
                   :lg="2"
-                  :xl="1"
+                  :xl="2"
                   style="text-align: right"
                 >
                   <el-dropdown
@@ -114,6 +86,11 @@
                   </el-dropdown>
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :xs="6" :sm="4" :md="4" :lg="2" :xl="1" class="time">
+                  {{ email }}
+                </el-col>
+              </el-row>
             </el-card>
           </el-col>
         </el-row>
@@ -121,6 +98,18 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class=""></el-col>
     </el-row>
     <CompaniesIsEmpty v-else />
+    <div class="fixed-button-right_bottom">
+      <router-link :to="`/company/create`">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Создать компанию"
+          placement="bottom-end"
+        >
+          <el-button icon="el-icon-plus" circle type="primary" />
+        </el-tooltip>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -145,7 +134,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getAllCompanies", "isAuthenticated"]),
+    ...mapGetters(["getAllCompanies", "isAuthenticated", "isLoadingCompany"]),
     getAllCompaniesSorted() {
       return [...this.getAllCompanies].sort((first, next) => {
         switch (this.settingsControl.sortedValue) {
@@ -208,7 +197,7 @@ export default {
 .page-title {
   font-size: 22px;
   line-height: 2em;
-  color: #303133;
+  color: var(--primary_text);
 }
 
 .time {

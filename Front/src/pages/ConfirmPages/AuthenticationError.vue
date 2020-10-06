@@ -7,7 +7,7 @@
       <h2>Ошибка доступа!</h2>
       <h4>Данная страница доступна лишь зарегистрированым пользователям</h4>
 
-      <el-tooltip content="вернуться назад" placement="bottom-end">
+      <el-tooltip content="Вернуться назад" placement="bottom-end">
         <el-button type="primary" circle plain @click="$router.go(-1)"
           ><i class="el-icon-back"
         /></el-button>

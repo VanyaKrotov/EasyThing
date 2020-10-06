@@ -1,113 +1,45 @@
 <template>
   <div>
-    <el-row>
-      <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="2" class="center">
-        <el-avatar
-          :size="100"
-          src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-        >
-        </el-avatar>
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="18"
-        :md="10"
-        :lg="10"
-        :xl="11"
-        class="text-container"
-      >
-        <div class="title-container">
-          {{ getCompanyValues.title }}
-        </div>
-        <div class="text-description-company">
-          <span class="text-color-silver ">{{ getCompanyValues.email }}</span>
-        </div>
-        <div class="text-description-company">
-          <span class="text-color-silver ">
-            Основана: {{ getCompanyValues.dateCreated | dateCreateFilter }}
-          </span>
-        </div>
-        <div class="text-description-company">
-          <span class="text-color-silver ">
-            Зарегистрирована:
-            {{ getCompanyValues.dateRegistration | dateCreateFilter }}
-          </span>
-        </div>
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="10"
-        :lg="10"
-        :xl="11"
-        class="text-container"
-      >
-        <div
-          class="text-description-company"
-          v-if="getCompanyValues.services && getCompanyValues.services.length"
-        >
-          <span>Предприятия:</span>
-          <span
-            v-bind:key="service.id"
-            class="text-color-silver"
-            v-for="service in getCompanyValues.services"
+    <el-row style="padding-bottom: 50px">
+      <div class="company-title-bunner">
+        <div class="mg20">{{ getCompanyValues.title }}</div>
+        <div class="text-center">
+          <el-image
+            style="width: 100px; height: 100px"
+            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4aff544c0c25941171jpeg.jpeg"
+            fit="fill"
           >
-            {{ service.title }},
-          </span>
+            <div slot="error" style="width: 100px; height: 100px">
+              <div class="error-logo-company">LOGO</div>
+            </div>
+          </el-image>
         </div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-collapse>
-        <el-collapse-item title="Описание компании" name="1">
-          <div v-html="getCompanyValues.description" /> </el-collapse-item
-      ></el-collapse>
+      </div>
     </el-row>
     <el-row>
       <el-menu
-        :default-active="path"
+        :default-active="$route.fullPath"
         mode="horizontal"
         active-text-color="#409EFF"
+        @select="(path) => $router.push(path)"
       >
-        <el-menu-item index="feed">
-          <router-link
-            :to="`/company/${getCompanyValues.id}/feed`"
-            class="link-item"
-          >
-            Общее</router-link
-          ></el-menu-item
-        >
-        <el-menu-item index="services">
-          <router-link
-            :to="`/company/${getCompanyValues.id}/services`"
-            class="link-item"
-          >
-            Предприятия</router-link
-          >
+        <el-menu-item :index="`/company/${getCompanyValues.id}/about`">
+          О компании
         </el-menu-item>
-        <el-menu-item index="workers">
-          <router-link
-            :to="`/company/${getCompanyValues.id}/workers`"
-            class="link-item"
-          >
-            Сотрудники</router-link
-          >
+        <el-menu-item :index="`/company/${getCompanyValues.id}/feed`">
+          Общее
         </el-menu-item>
-        <el-menu-item index="schedule">
-          <router-link
-            :to="`/company/${getCompanyValues.id}/schedule`"
-            class="link-item"
-          >
-            Графики</router-link
-          >
+        <el-menu-item :index="`/company/${getCompanyValues.id}/services`">
+          Предприятия
         </el-menu-item>
-        <el-menu-item index="settings">
-          <router-link
-            :to="`/company/${getCompanyValues.id}/settings`"
-            class="link-item"
-          >
-            Настройки</router-link
-          >
+        <el-menu-item :index="`/company/${getCompanyValues.id}/workers`">
+          Сотрудники
+        </el-menu-item>
+        <el-menu-item :index="`/company/${getCompanyValues.id}/schedule`">
+          Графики
+        </el-menu-item>
+        <el-menu-item :index="`/company/${getCompanyValues.id}/settings`">
+          Настройки
         </el-menu-item>
       </el-menu>
     </el-row>
@@ -135,9 +67,6 @@ export default {
   },
   computed: {
     ...mapGetters(["getCompanyValues"]),
-    path() {
-      return this.$route.fullPath.split("/").pop();
-    },
   },
   methods: {
     ...mapActions(["fetchCompany"]),
@@ -161,6 +90,27 @@ export default {
 </script>
 
 <style scoped>
+.company-title-bunner {
+  width: 100%;
+  height: 150px;
+  border: solid 1px #e6e6e6;
+  color: var(--primary_text);
+  text-align: center;
+  position: relative;
+}
+
+.error-logo-company {
+  width: 98%;
+  height: 98%;
+  background: #f5f7fa;
+  color: #c0c4cc;
+  padding: 37px 0px;
+}
+
+.company-title-bunner > div:first-child {
+  font-size: 36px;
+}
+
 .title-container {
   font-size: 40px;
   margin-bottom: 10px;

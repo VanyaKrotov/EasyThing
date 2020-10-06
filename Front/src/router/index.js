@@ -5,12 +5,21 @@ import Page404 from "../pages/ErrorPages/Page404";
 import Companies from "../pages/Company/Companies";
 import Login from "../pages/Login";
 import CompanyEdit from "../pages/Company/Edit";
-import CompanySettings from "../pages/Company/Settings";
 import Company from "../pages/Company/Company";
-import CompanyFeed from "../pages/Company/Feed";
-import CompanyServices from "../pages/Company/Services";
-import CompanySchedule from "../pages/Company/Schedule";
-import CompanyWorkers from "../pages/Company/Workers";
+import Calendar from "../pages/Calendar/Calendar";
+import Settings from "../pages/Profile/Settings/Settings";
+import Board from "../pages/Board/Board";
+import Analytics from "../pages/Analytics/Analytics";
+import News from "../pages/CommonNews/News";
+import Profile from "../pages/Profile/Profile";
+import Near from "../pages/Near/Near";
+
+import CompanyFeed from "../pages/Company/SubPages/Feed";
+import CompanyServices from "../pages/Company/SubPages/Services";
+import CompanySchedule from "../pages/Company/SubPages/Schedule";
+import CompanyWorkers from "../pages/Company/SubPages/Workers";
+import CompanySettings from "../pages/Company/SubPages/Settings";
+import CompanyAbout from "../pages/Company/SubPages/About";
 
 export default new Router({
   routes: [
@@ -23,6 +32,41 @@ export default new Router({
       path: "/service",
       component: Services,
       name: "services",
+    },
+    {
+      path: "/calendar",
+      component: Calendar,
+      name: "calendar",
+    },
+    {
+      path: "/settings",
+      component: Settings,
+      name: "settings",
+    },
+    {
+      path: "/board",
+      component: Board,
+      name: "board",
+    },
+    {
+      path: "/analytics",
+      component: Analytics,
+      name: "analytics",
+    },
+    {
+      path: "/news",
+      component: News,
+      name: "news",
+    },
+    {
+      path: "/:profileId/profile",
+      component: Profile,
+      name: "profile",
+    },
+    {
+      path: "/near",
+      component: Near,
+      name: "near",
     },
     {
       path: "/login",
@@ -43,6 +87,7 @@ export default new Router({
       path: "/company/:id",
       component: Company,
       children: [
+        { path: "about", component: CompanyAbout },
         { path: "feed", component: CompanyFeed },
         { path: "services", component: CompanyServices },
         { path: "schedule", component: CompanySchedule },

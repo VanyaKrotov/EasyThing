@@ -6,7 +6,7 @@ import {
 } from ".././../request-methods";
 import { format } from "date-fns";
 
-const defaultCompany = {
+export const defaultCompany = {
   title: "",
   email: "",
   description: "",
@@ -33,29 +33,30 @@ export default {
     },
     async fetchCompany(context, { companyId }) {
       context.state.isFetching = true;
-      context.commit("setCompany", { ...defaultCompany });
 
       try {
         const { company } = await getRequest({
           url: `api/v1/Company/${companyId}/`,
         });
 
-        context.commit("setCompany", {
-          ...company,
-          location: JSON.parse(company.location),
-        });
+        const newCompanies = [
+          {
+            ...company,
+            location: JSON.parse(company.location),
+          },
+        ];
+
+        context.commit("setCompanies", newCompanies);
       } catch (error) {
         console.error(error);
       }
 
       context.state.isFetching = false;
     },
-    async createCompany(context, { setMessage, router }) {
+    async createCompany(context, { setMessage, router, companyData }) {
       context.state.isFetching = true;
 
       try {
-        const companyData = context.state.company;
-        console.log(companyData);
         const { id } = await postRequest({
           url: "api/v1/Company/Create/",
           data: {
@@ -86,11 +87,10 @@ export default {
 
       context.state.isFetching = false;
     },
-    async editCompany(context, { setMessage, router }) {
+    async editCompany(context, { setMessage, router, companyData }) {
       context.state.isFetching = true;
 
       try {
-        const companyData = context.state.company;
         const { id } = await putRequest({
           url: `api/v1/Company/Edit/${companyData.id}/`,
           data: {
@@ -144,22 +144,17 @@ export default {
     },
   },
   mutations: {
-    setCompanies(state, companiesList) {
-      state.companiesList = companiesList;
-      state.isFetching = false;
-    },
-    setCompany(state, company) {
-      state.company = company;
+    setCompanies(state, companies) {
+      state.companies = companies;
     },
   },
   state: {
     isFetching: false,
-    companiesList: [],
-    company: { ...defaultCompany },
+    companies: [],
   },
   getters: {
-    getAllCompanies: ({ companiesList }) => companiesList,
-    getCompanyValues: ({ company }) => company,
+    getAllCompanies: ({ companies }) => companies,
+    getCompanyValues: ({ companies }) => companies[0],
     isLoadingCompany: ({ isFetching }) => isFetching,
   },
 };
