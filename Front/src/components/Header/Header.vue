@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-row class="header">
-      <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="10" class="logo">
+      <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="2" class="logo">
         <div>
           <router-link to="/home">EasyThing</router-link>
         </div>
       </el-col>
-      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="7">
+      <el-col :xs="12" :sm="10" :md="10" :lg="10" :xl="11">
         <el-menu
           :default-active="$route.fullPath"
           mode="horizontal"
@@ -17,7 +17,7 @@
           </el-menu-item>
         </el-menu>
       </el-col>
-      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="7" class="user-col">
+      <el-col :xs="12" :sm="10" :md="10" :lg="10" :xl="11" class="user-col">
         <el-dropdown trigger="click" v-if="isAuthenticated">
           <el-button icon="el-icon-bell" circle></el-button>
           <el-dropdown-menu slot="dropdown">

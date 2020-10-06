@@ -126,7 +126,7 @@ export default {
 }
 
 .root-control {
-  width: 400px;
+  max-width: 400px;
   height: 600px;
   display: flex;
   justify-self: center;

@@ -34,7 +34,7 @@
                 content="Перейти к настройкам компаний"
                 placement="bottom-end"
               >
-                <el-button icon="el-icon-s-operation" />
+                <el-button icon="el-icon-s-operation" circle/>
               </el-tooltip>
               {{ " " }}
               <router-link :to="`/company/create`">
@@ -44,7 +44,7 @@
                   content="Создать компанию"
                   placement="bottom-end"
                 >
-                  <el-button icon="el-icon-plus" />
+                  <el-button icon="el-icon-plus" circle/>
                 </el-tooltip>
               </router-link>
             </span>

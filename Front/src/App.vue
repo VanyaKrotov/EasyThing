@@ -1,31 +1,27 @@
 <template>
-  <div id="app">
-    <div v-loading="isLoadingUser">
-      <Header />
-      <RightMenu>
-        <el-main>
-          <!-- <keep-alive> -->
-          <router-view></router-view>
-          <!-- </keep-alive> -->
-        </el-main>
-      </RightMenu>
-      <Footer />
-    </div>
+  <div v-loading="isLoadingUser" id="app">
+    <Header />
+    <BodyContainer>
+      <el-main>
+        <!-- <keep-alive> -->
+        <router-view></router-view>
+        <!-- </keep-alive> -->
+      </el-main>
+    </BodyContainer>
+    <!-- <Footer /> -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import RightMenu from "./components/RightMenu/RightMenu";
+import BodyContainer from "./components/BodyContainer/BodyContainer";
 
 export default {
   name: "App",
   components: {
     Header,
-    Footer,
-    RightMenu,
+    BodyContainer,
   },
   methods: {
     ...mapActions(["authUser"]),
@@ -45,7 +41,9 @@ export default {
   font-weight: 500;
 }
 
-html {
+html,
+body,
+#app {
   width: 100%;
   height: 100%;
 }

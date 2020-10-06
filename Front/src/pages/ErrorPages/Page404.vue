@@ -20,12 +20,7 @@ export default {
 };
 </script>
 
-<style>
-.error-container {
-  margin: 100px auto;
-  max-width: 500px;
-}
-
+<style scoped>
 h1,
 h2 {
   text-align: center;
