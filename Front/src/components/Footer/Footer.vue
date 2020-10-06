@@ -16,6 +16,7 @@ export default {
 <style scoped>
 .el-footer {
   color: #00181f;
+  border-top: solid 1px #e6e6e6 
 }
 
 

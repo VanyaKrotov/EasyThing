@@ -1,13 +1,11 @@
 <template>
   <div>
     <AuthenticationError v-if="!isAuthenticated" />
-    <el-row class="" v-else-if="getAllCompaniesSorted.length > 0">
+    <el-row v-else-if="getAllCompaniesSorted.length > 0">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="">
         <el-row>
           <el-col :xs="24" :sm="6" :md="8" :lg="6" :xl="4">
-            <span class="page-title">
-              Ваши компании:
-            </span>
+            <span class="page-title"> Ваши компании: </span>
           </el-col>
           <el-col
             :xs="24"
@@ -28,15 +26,7 @@
                 <el-option label="По количеству предприятий" :value="3" />
               </el-select>
             </span>
-            <span class="mlr1">
-              <el-select
-                v-model="settingsControl.viewValue"
-                placeholder="Тип отображения"
-              >
-                <el-option label="Карточки" :value="0" />
-                <el-option label="Список" :value="1" />
-              </el-select>
-            </span>
+
             <span class="mlr1">
               <el-tooltip
                 class="item"
@@ -62,48 +52,7 @@
         </el-row>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="">
-        <el-row :gutter="20" v-if="settingsControl.viewValue === 0">
-          <el-col
-            v-for="{
-              title,
-              id,
-              countServices,
-              dateCreated,
-            } in getAllCompaniesSorted"
-            :span="20"
-            class="mtb1"
-            :xs="24"
-            :sm="12"
-            :md="12"
-            :lg="8"
-            :xl="8"
-            :key="`company-${id}`"
-          >
-            <router-link :to="`/company/${id}/feed`">
-              <el-card
-                :body-style="{ padding: '0px', cursor: 'pointer' }"
-                shadow="hover"
-              >
-                <img
-                  src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                  class="image"
-                />
-                <div style="padding: 14px;">
-                  <span>{{ title }}</span>
-                  <div class="bottom clearfix">
-                    <time class="time"
-                      >Дата основания:
-                      {{ dateCreated | dateCreateFilter }}</time
-                    >
-                    <div class="time">Предприятий: {{ countServices }}</div>
-                    <!-- <el-button type="text" class="button">Настройки</el-button> -->
-                  </div>
-                </div>
-              </el-card>
-            </router-link>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" v-else class="mtb1">
+        <el-row :gutter="20" class="mtb1">
           <el-col
             :xs="24"
             :sm="24"
@@ -116,7 +65,6 @@
               title,
               id,
               email,
-              location,
               dateRegistration,
               dateCreated,
             } in getAllCompaniesSorted"
@@ -126,14 +74,11 @@
               <el-row :gutter="20">
                 <el-col :xs="10" :sm="7" :md="7" :lg="11" :xl="12">
                   <router-link :to="`/company/${id}/feed`">
-                    <el-button type="text" icon="el-icon-top-right">{{
-                      title
-                    }}</el-button>
+                    <el-button type="text">{{ title }}</el-button>
                   </router-link>
                 </el-col>
                 <el-col :xs="8" :sm="6" :md="6" :lg="5" :xl="5">
                   <div class="time">{{ email }}</div>
-                  <!-- <div class="time">{{ location }}</div> -->
                 </el-col>
                 <el-col :xs="0" :sm="7" :md="7" :lg="6" :xl="5">
                   <div class="time">
@@ -143,27 +88,30 @@
                     Зарегистрирована: {{ dateRegistration | dateCreateFilter }}
                   </div>
                 </el-col>
-                <el-col :xs="6" :sm="4" :md="4" :lg="2" :xl="1">
-                  <div>
-                    <router-link :to="`/company/${id}/settings`">
-                      <el-button
-                        type="text"
-                        style="font-size: 12px;"
-                        icon="el-icon-s-operation"
-                        >Настройки</el-button
+                <el-col
+                  :xs="6"
+                  :sm="4"
+                  :md="4"
+                  :lg="2"
+                  :xl="1"
+                  style="text-align: right"
+                >
+                  <el-dropdown
+                    @command="(link) => $router.push(link)"
+                    trigger="click"
+                  >
+                    <el-button type="text" class="s_20x20">
+                      <i class="el-icon-more-outline" />
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item :command="`/company/${id}/settings`"
+                        >Настройки</el-dropdown-item
                       >
-                    </router-link>
-                  </div>
-                  <div>
-                    <router-link :to="`/company/${id}/edit`">
-                      <el-button
-                        type="text"
-                        style="font-size: 12px;"
-                        icon="el-icon-edit"
-                        >Редактировать</el-button
+                      <el-dropdown-item :command="`/company/${id}/edit`"
+                        >Редактировать</el-dropdown-item
                       >
-                    </router-link>
-                  </div>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </el-col>
               </el-row>
             </el-card>
@@ -192,7 +140,6 @@ export default {
   data() {
     return {
       settingsControl: {
-        viewValue: 1,
         sortedValue: 0,
       },
     };

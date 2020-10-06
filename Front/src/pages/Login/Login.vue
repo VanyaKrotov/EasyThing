@@ -77,9 +77,6 @@
         </span>
       </div>
     </div>
-    <div class="side">
-      <img src="../../images/users.jpg" />
-    </div>
   </div>
 </template>
 
@@ -129,23 +126,15 @@ export default {
 }
 
 .root-control {
-  width: 1000px;
+  width: 400px;
   height: 600px;
   display: flex;
   justify-self: center;
   margin: 50px auto;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-.root-control .side:first-child {
-  width: 40%;
-}
-
-.root-control .side {
-  width: 60%;
 }
 
 .side {
+  width: 100%;
   height: 100%;
 }
 

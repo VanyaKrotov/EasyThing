@@ -86,4 +86,9 @@ a {
   height: 100%;
   color: #409eff;
 }
+
+.s_20x20 {
+  width: 20px;
+  height: 20px;
+}
 </style>

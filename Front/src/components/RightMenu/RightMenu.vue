@@ -9,22 +9,46 @@
         active-text-color="#409EFF"
         :collapse="isCollapsed"
         v-if="isAuthenticated"
+        style="height: 100%"
+        @select="menuSelectedHandle"
       >
-        <el-menu-item index="/companies">
-          <router-link to="/companies" class="link-item">
+        <div style="height: 82%">
+          <el-menu-item index="/companies">
             <i class="el-icon-office-building"></i>
-          </router-link>
-          <span slot="title" to="/companies">Компании</span>
-        </el-menu-item>
-        <el-menu-item index="/settings">
-          <router-link to="/settings" class="link-item">
+            <span slot="title" to="/companies">Компании</span>
+          </el-menu-item>
+
+          <el-menu-item index="/analitics">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">Аналитика</span>
+          </el-menu-item>
+
+          <el-menu-item index="/calendar">
+            <i class="el-icon-date"></i>
+            <span slot="title">Календарь</span>
+          </el-menu-item>
+
+          <el-menu-item index="/board">
+            <i class="el-icon-data-line"></i>
+            <span slot="title">Доска</span>
+          </el-menu-item>
+        </div>
+
+        <div style="height: 18%">
+          <el-menu-item index="/settings">
             <i class="el-icon-setting"></i>
-          </router-link>
-          <span slot="title">Настройки</span>
-        </el-menu-item>
+            <span slot="title">Настройки</span>
+          </el-menu-item>
+
+          <el-menu-item @click="isCollapsed = !isCollapsed">
+            <i :class="`el-icon-arrow-${isCollapsed ? 'right' : 'left'}`"></i>
+            <span slot="title" v-if="isCollapsed">Развернуть</span>
+            <span slot="title" v-else>Свернуть</span>
+          </el-menu-item>
+        </div>
       </el-menu>
     </div>
-    <div style="width: 100%;">
+    <div style="width: 100%">
       <slot />
     </div>
   </el-row>
@@ -50,6 +74,11 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    menuSelectedHandle(menuItemIndex) {
+      if (menuItemIndex) {
+        this.$router.push(menuItemIndex);
+      }
+    },
   },
 };
 </script>
@@ -63,5 +92,6 @@ export default {
 .menu-row {
   display: flex;
   justify-content: flex-start;
+  min-height: 700px;
 }
 </style>
