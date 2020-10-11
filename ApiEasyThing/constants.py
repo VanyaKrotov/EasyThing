@@ -1,0 +1,1 @@
+DEFAULT_LOCATION_JSON_OBJECT = '{"coords": {"latitude": 0.0, "longitude": 0.0}, "country": "", "adress": ""}'

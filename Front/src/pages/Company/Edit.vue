@@ -23,9 +23,14 @@
           @onConfirm="handlerDelete"
           title="Вы действительно хотите удалить компанию?"
         >
-          <el-button type="danger" slot="reference" class="delete-button" plain
-            >Удалить</el-button
-          >
+          <el-button
+            type="danger"
+            slot="reference"
+            class="delete-button"
+            plain
+            circle
+            ><i class="el-icon-delete"
+          /></el-button>
         </el-popconfirm>
       </h2>
 
@@ -37,8 +42,8 @@
             required: true,
             trim: true,
             message: 'Название компании не может быть пустым',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ]"
       >
         <el-input v-model="formData.title" name="title" />
@@ -50,13 +55,13 @@
           {
             required: true,
             message: 'Электронная почта должна быть указана',
-            trigger: 'blur',
+            trigger: 'blur'
           },
           {
             type: 'email',
             message: 'Электронная почта неккоректна',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ]"
       >
         <el-input v-model="formData.email" name="email" />
@@ -72,16 +77,16 @@
       </el-form-item>
       <el-form-item label="Расположение компании:" prop="location">
         <div class="container-map">
-          <yandex-map
-            :coords="formData.location"
-            :zoom="10"
-            @click="changeLocation"
-          >
+          <yandex-map :coords="arrayCoords" :zoom="10" @click="changeLocation">
             <ymap-marker
-              :coords="formData.location"
+              :coords="arrayCoords"
               marker-id="123"
               :hint-content="formData.title"
-            />
+            >
+              <!--  <i class="el-icon-location-information" slot="balloon">{{
+                formData.title
+              }}</i> -->
+            </ymap-marker>
           </yandex-map>
         </div>
       </el-form-item>
@@ -92,8 +97,8 @@
           {
             required: true,
             message: 'Описание компании должно быть заполнено',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ]"
       >
         <vue-editor v-model="formData.description" name="description" />
@@ -112,42 +117,68 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
-import { defaultCompany } from "../../store/models/company";
-import AuthenticationError from "../ConfirmPages/AuthenticationError";
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { Coords } from '../../objects';
+import { defaultCompany } from '../../store/models/company';
+import AuthenticationError from '../ConfirmPages/AuthenticationError';
 
 export default {
-  name: "Edit",
+  name: 'Edit',
   components: {
-    AuthenticationError,
+    AuthenticationError
   },
   data() {
     return {
       isEditForm: false,
-      formData: { ...defaultCompany },
+      formData: { ...defaultCompany }
     };
   },
   computed: {
-    ...mapGetters(["getCompanyValues", "isLoadingCompany", "isAuthenticated"]),
+    ...mapGetters(['getCompanyValues', 'isLoadingCompany', 'isAuthenticated']),
+    arrayCoords: ({
+      formData: {
+        location: { coords: { latitude = 0.0, longitude = 0.0 } = {} } = {}
+      } = {}
+    }) => [latitude, longitude]
   },
   methods: {
-    ...mapMutations(["setStatusLoading"]),
+    ...mapMutations(['setStatusLoading']),
     ...mapActions([
-      "createCompany",
-      "deleteCompany",
-      "editCompany",
-      "fetchCompany",
+      'createCompany',
+      'deleteCompany',
+      'editCompany',
+      'fetchCompany'
     ]),
-    changeLocation(e) {
-      this.formData.location = e.get("coords");
+
+    /* async checkAdress(pos) {
+      const response = await fetch(
+        `http://geocode-maps.yandex.ru/1.x/?geocode=${pos[1]},${pos[0]}&format=json&apikey=6eae48fe-cd83-408a-a2e5-c11bb62da1cf`
+      );
+
+      return await response.json();
+    }, */
+    async changeLocation(e) {
+      const coords = e.get('coords');
+
+      this.formData.location.coords = new Coords({
+        latitude: coords[0],
+        longitude: coords[1]
+      });
+      /* const {
+        response: {
+          GeoObjectCollection: { featureMember }
+        }
+      } = await this.checkAdress(this.formData.location);
+      this.formData.locationName =
+        featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text; */
     },
     async submitForm() {
-      this.$refs["companyEdit"].validate((valid) => {
+      this.$refs['companyEdit'].validate((valid) => {
         if (valid) {
           const serviceObject = {
             setMessage: this.$message,
             companyData: this.formData,
-            router: this.$router,
+            router: this.$router
           };
 
           if (this.isEditForm) {
@@ -164,12 +195,12 @@ export default {
     },
     cancelHandler() {
       this.$confirm(
-        "Все несохраненные данные будут потеряны. Продолжить?",
-        `Отмена ${this.isEditForm ? "редактирования" : "сохранения"}`,
+        'Все несохраненные данные будут потеряны. Продолжить?',
+        `Отмена ${this.isEditForm ? 'редактирования' : 'сохранения'}`,
         {
-          confirmButtonText: "Да",
-          cancelButtonText: "Отменить",
-          type: "warning",
+          confirmButtonText: 'Да',
+          cancelButtonText: 'Отменить',
+          type: 'warning'
         }
       )
         .then(() => {
@@ -181,9 +212,9 @@ export default {
       this.deleteCompany({
         setMessage: this.$message,
         id: this.formData.id,
-        router: this.$router,
+        router: this.$router
       });
-    },
+    }
   },
   async mounted() {
     const companyId = this.$route.params.id || 0;
@@ -197,11 +228,14 @@ export default {
     } else {
       navigator.geolocation.getCurrentPosition(
         ({ coords: { latitude, longitude } }) => {
-          this.formData.location = [latitude, longitude];
+          this.formData.location.coords = new Coords({
+            latitude,
+            longitude
+          });
         }
       );
     }
-  },
+  }
 };
 </script>
 
@@ -223,15 +257,6 @@ h2 {
 
 .buttons-control {
   text-align: center;
-}
-
-.ymap-container {
-  height: 100%;
-}
-
-.container-map {
-  width: 100%;
-  height: 500px;
 }
 
 .title {

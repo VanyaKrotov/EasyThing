@@ -121,7 +121,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+MEDIA_ROOT = '/images/'
+MEDIA_URL = '/images/'
 # AUTH_USER_MODEL = 'User.User'
 
 CORS_ORIGIN_ALLOW_ALL = True

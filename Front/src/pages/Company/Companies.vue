@@ -114,27 +114,27 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { ru } from "date-fns/locale";
-import { format } from "date-fns";
-import CompaniesIsEmpty from "./CompaniesIsEmpty";
-import AuthenticationError from "../ConfirmPages/AuthenticationError";
+import { mapActions, mapGetters } from 'vuex';
+import { ru } from 'date-fns/locale';
+import { format } from 'date-fns';
+import CompaniesIsEmpty from './CompaniesIsEmpty';
+import AuthenticationError from '../ConfirmPages/AuthenticationError';
 
 export default {
-  name: "Companies",
+  name: 'Companies',
   components: {
     AuthenticationError,
-    CompaniesIsEmpty,
+    CompaniesIsEmpty
   },
   data() {
     return {
       settingsControl: {
-        sortedValue: 0,
-      },
+        sortedValue: 0
+      }
     };
   },
   computed: {
-    ...mapGetters(["getAllCompanies", "isAuthenticated", "isLoadingCompany"]),
+    ...mapGetters(['getAllCompanies', 'isAuthenticated', 'isLoadingCompany']),
     getAllCompaniesSorted() {
       return [...this.getAllCompanies].sort((first, next) => {
         switch (this.settingsControl.sortedValue) {
@@ -151,59 +151,29 @@ export default {
             return next.countServices - first.countServices;
         }
       });
-    },
+    }
   },
   methods: {
-    ...mapActions(["fetchAllCompanies"]),
+    ...mapActions(['fetchAllCompanies'])
   },
   mounted() {
     this.fetchAllCompanies(this.$message);
   },
   filters: {
     dateCreateFilter: (value) => {
-      return format(new Date(value), "d MMMM yyyy года", {
-        locale: ru,
+      return format(new Date(value), 'd MMMM yyyy года', {
+        locale: ru
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-.mlr1 {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.mtb1 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.mtb05 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.mlr05 {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.settings-controls {
-  text-align: right;
-}
-
 .page-title {
   font-size: 22px;
   line-height: 2em;
   color: var(--primary_text);
-}
-
-.time {
-  font-size: 13px;
-  color: #999;
-  margin-top: 4px;
 }
 
 .bottom {
@@ -224,7 +194,7 @@ export default {
 .clearfix:before,
 .clearfix:after {
   display: table;
-  content: "";
+  content: '';
 }
 
 .clearfix:after {

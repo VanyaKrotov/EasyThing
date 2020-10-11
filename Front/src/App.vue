@@ -13,25 +13,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Header from "./components/Header/Header";
-import BodyContainer from "./components/BodyContainer/BodyContainer";
+import { mapGetters } from 'vuex';
+import Header from './components/Header/Header';
+import BodyContainer from './components/BodyContainer/BodyContainer';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Header,
-    BodyContainer,
-  },
-  methods: {
-    ...mapActions(["authUser"]),
+    BodyContainer
   },
   computed: {
-    ...mapGetters(["isLoadingUser"]),
+    ...mapGetters(['isLoadingUser'])
   },
-  async mounted() {
-    this.authUser();
-  },
+  async mounted() {}
 };
 </script>
 
@@ -42,8 +37,17 @@ export default {
   --secondary_text: #909399;
 }
 * {
-  font-family: "Nunito Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 500;
+}
+
+.ymap-container {
+  height: 100%;
+}
+
+.container-map {
+  width: 100%;
+  height: 500px;
 }
 
 html,
@@ -59,6 +63,36 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.mlr1 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.time {
+  font-size: 13px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.mtb1 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mtb05 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.mlr05 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.settings-controls {
+  text-align: right;
 }
 
 .link {
@@ -84,6 +118,14 @@ a {
   text-align: center;
 }
 
+.title {
+  color: var(--primary_text);
+}
+
+.text-right {
+  text-align: right;
+}
+
 .link-item {
   display: inline-block;
   height: 100%;
@@ -99,5 +141,13 @@ a {
   position: fixed;
   right: 40px;
   bottom: 40px;
+}
+
+.el-drawer *:focus {
+  outline: none;
+}
+
+.el-drawer__body {
+  overflow-y: auto;
 }
 </style>

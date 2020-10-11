@@ -9,7 +9,7 @@
         :collapse="isCollapsed"
         v-if="isAuthenticated"
         style="height: 100%"
-        @select="menuSelectedHandle"
+        :router="true"
       >
         <div style="height: 80%">
           <el-menu-item index="/companies">
@@ -61,28 +61,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "BodyContainer",
+  name: 'BodyContainer',
   data() {
     return {
       isCollapsed: true,
-      menuHeight: 0,
+      menuHeight: 0
     };
   },
   computed: {
-    ...mapGetters(["isAuthenticated"]),
+    ...mapGetters(['isAuthenticated']),
     getFullHeight() {
       return `${this.menuHeight}px`;
-    },
+    }
   },
   methods: {
     calcMenuHeight() {
-      const clientHeight = document.getElementsByTagName("html")[0]
-        .clientHeight;
+      const element = document.getElementsByTagName('html')[0];
+      const clientHeight = element.clientHeight;
+      const clientWidth = element.clientWidth;
 
-      return clientHeight - 61 * (clientHeight < 770 ? 2 : 1);
+      return clientHeight - 61 * (clientWidth < 770 ? 2 : 1);
     },
     menuSelectedHandle(menuItemIndex) {
       if (menuItemIndex) {
@@ -91,13 +92,13 @@ export default {
     },
     onResuze() {
       this.menuHeight = this.calcMenuHeight();
-    },
+    }
   },
   mounted() {
     this.menuHeight = this.calcMenuHeight();
 
     window.onresize = this.onResuze;
-  },
+  }
 };
 </script>
 

@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <el-row style="padding-bottom: 50px">
+  <div v-loading="isLoadingCompany">
+    <el-row style="padding-bottom: 50px" v-if="getCompanyValues">
       <div class="company-title-bunner">
         <div class="mg20">{{ getCompanyValues.title }}</div>
         <div class="text-center">
           <el-image
             style="width: 100px; height: 100px"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4aff544c0c25941171jpeg.jpeg"
+            :src="getLogoPath"
             fit="fill"
           >
             <div slot="error" style="width: 100px; height: 100px">
@@ -18,37 +18,34 @@
     </el-row>
     <el-row>
       <el-menu
-        :default-active="$route.fullPath"
+        :default-active="defaultMenuRoute"
         mode="horizontal"
         active-text-color="#409EFF"
-        @select="(path) => $router.push(path)"
+        :router="true"
       >
-        <el-menu-item :index="`/company/${getCompanyValues.id}/about`">
-          О компании
+        <el-menu-item index="feed">
+          Лента
         </el-menu-item>
-        <el-menu-item :index="`/company/${getCompanyValues.id}/feed`">
-          Общее
-        </el-menu-item>
-        <el-menu-item :index="`/company/${getCompanyValues.id}/services`">
+        <el-menu-item index="services">
           Предприятия
         </el-menu-item>
-        <el-menu-item :index="`/company/${getCompanyValues.id}/workers`">
+        <el-menu-item index="workers">
           Сотрудники
         </el-menu-item>
-        <el-menu-item :index="`/company/${getCompanyValues.id}/schedule`">
+        <el-menu-item index="schedule">
           Графики
         </el-menu-item>
-        <el-menu-item :index="`/company/${getCompanyValues.id}/settings`">
+        <el-menu-item index="settings">
           Настройки
+        </el-menu-item>
+        <el-menu-item index="about">
+          О компании
         </el-menu-item>
       </el-menu>
     </el-row>
     <router-view></router-view>
     <div class="edit-link-floating-button">
-      <router-link
-        :to="`/company/${getCompanyValues.id}/edit`"
-        class="link-item"
-      >
+      <router-link to="edit" class="link-item">
         <el-button type="primary" circle icon="el-icon-edit" />
       </router-link>
     </div>
@@ -56,36 +53,41 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { ru } from "date-fns/locale";
-import { format } from "date-fns";
+import { mapActions, mapGetters } from 'vuex';
+import { getImageUrl } from '../../request-methods';
+import { ru } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 export default {
-  name: "Company",
-  data() {
-    return {};
-  },
+  name: 'Company',
   computed: {
-    ...mapGetters(["getCompanyValues"]),
+    ...mapGetters(['getCompanyValues', 'isLoadingCompany']),
+    companyId: ({ getCompanyValues = {} }) => getCompanyValues.id,
+    defaultMenuRoute() {
+      const parseRoute = this.$route.fullPath.split('/');
+
+      return parseRoute[parseRoute.length - 1];
+    },
+    getLogoPath: ({ getCompanyValues = {} }) =>
+      getImageUrl(getCompanyValues.logo)
   },
   methods: {
-    ...mapActions(["fetchCompany"]),
+    ...mapActions(['fetchCompany'])
   },
   async mounted() {
     const companyId = this.$route.params.id || 0;
-
     this.fetchCompany({ companyId });
   },
   filters: {
     dateCreateFilter: (value) => {
       return (
         value &&
-        format(new Date(value), "d MMMM yyyy года", {
-          locale: ru,
+        format(new Date(value), 'd MMMM yyyy года', {
+          locale: ru
         })
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
